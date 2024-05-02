@@ -19,6 +19,7 @@ import {
   IconAccount,
   IconBag,
   IconSearch,
+  IconLogo,
 } from '~/components/Icon';
 import {
   type EnhancedMenu,
@@ -264,11 +265,11 @@ function DesktopHeader({
         !isHome && y > 50 && ' shadow-lightHeader'
       } hidden h-nav lg:flex items-center sticky transition duration-300 backdrop-blur-lg z-40 top-0 justify-between w-full leading-none gap-8 px-12 py-8`}
     >
+      <Link className="font-bold" to="/" prefetch="intent">
+        <IconLogo />
+      </Link>
       <div className="flex gap-12">
-        <Link className="font-bold" to="/" prefetch="intent">
-          {title}
-        </Link>
-        <nav className="flex gap-8">
+        <nav className="flex  gap-8">
           {/* Top level menu items */}
           {(menu?.items || []).map((item) => (
             <Link
@@ -284,8 +285,6 @@ function DesktopHeader({
             </Link>
           ))}
         </nav>
-      </div>
-      <div className="flex items-center gap-1">
         <Form
           method="get"
           action={params.locale ? `/${params.locale}/search` : '/search'}
@@ -414,16 +413,20 @@ function Footer({menu}: {menu?: EnhancedMenu}) {
       divider={isHome ? 'none' : 'top'}
       as="footer"
       role="contentinfo"
-      className={`grid min-h-[25rem] items-start grid-flow-row w-full gap-6 py-8 px-6 md:px-8 lg:px-12 md:gap-8 lg:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-${itemsCount}
-        bg-primary dark:bg-contrast dark:text-primary text-contrast overflow-hidden`}
+      className="bg-primary dark:bg-contrast dark:text-primary text-contrast overflow-hidden"
     >
-      <FooterMenu menu={menu} />
-      <CountrySelector />
+      <FooterTopLinks />
       <div
-        className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
+        className={`grid min-h-[25rem] items-start grid-flow-row w-full gap-6 py-8 px-6 md:px-8 lg:px-12 md:gap-8 lg:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-${itemsCount}
+        `}
       >
-        &copy; {new Date().getFullYear()} / Shopify, Inc. Hydrogen is an MIT
-        Licensed Open Source project.
+        <FooterMenu menu={menu} />
+        <CountrySelector />
+        <div
+          className={`self-end pt-8 opacity-50 md:col-span-2 lg:col-span-${itemsCount}`}
+        >
+          &copy; {new Date().getFullYear()} / kalavriti by cloudactivelabs.com.
+        </div>
       </div>
     </Section>
   );
@@ -444,7 +447,9 @@ function FooterLink({item}: {item: ChildEnhancedMenuItem}) {
     </Link>
   );
 }
-
+function FooterTopLinks() {
+  return <p className="font-bold">Top Links</p>;
+}
 function FooterMenu({menu}: {menu?: EnhancedMenu}) {
   const styles = {
     section: 'grid gap-4',

@@ -42,7 +42,7 @@ test.describe('Cart', () => {
     await page.locator(`[data-test=product-grid] a  >> nth=0`).click();
 
     const secondItemPrice = normalizePrice(
-      await page.locator(`[data-test=price]`).textContent(),
+      await page.locator33(`[data-test=price]`).textContent(),
     );
 
     // Add another unit by adding to cart the same item

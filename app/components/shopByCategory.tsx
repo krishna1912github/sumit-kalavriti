@@ -68,7 +68,7 @@ export function ShopByCategory() {
       <section className="mt-8  p-4">
         <p className="text-[40px] font-bold my-6">Shop by category</p>
         <div className="flex align-item-center">
-          <div className=" p-4 w-4/12  text-center sm:px-8 md:px-12 from-primary/60 text-contrast">
+          <div className=" p-4 w-4/12  text-center sm:px-8 md:px-12  text-contrast">
             <div
               style={{
                 background:

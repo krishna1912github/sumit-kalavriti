@@ -1,13 +1,13 @@
 @font-face {
-  font-family: 'IBMPlexSerif';
+  font-family: 'Inter';
   font-display: swap;
   font-weight: 400;
-  src: url('./fonts/IBMPlexSerif-Text.woff2') format('woff2');
+  src: url('./fonts/Inter-Text.woff2') format('woff2');
 }
 @font-face {
-  font-family: 'IBMPlexSerif';
+  font-family: 'Inter';
   font-display: swap;
   font-weight: 400;
   font-style: italic;
-  src: url('./fonts/IBMPlexSerif-TextItalic.woff2') format('woff2');
+  src: url('./fonts/Inter-TextItalic.woff2') format('woff2');
 }

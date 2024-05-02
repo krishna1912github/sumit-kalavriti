@@ -34,11 +34,14 @@ export function Hero({
   return (
     <Link to={`/collections/${handle}`} prefetch="viewport">
       <section className="flex h-[70vh] align-item-center">
-        <div className="w-4/12 p-4 text-center sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast bg-[#006466]">
+        <div className="flex relative flex-col justify-center items-center h-full w-4/12 p-4 text-center sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast bg-[#006466]">
+          <div className="absolute top-0 bg-[#C30E29] w-full p-2">
+            <p className="font-bold text-[38px]">Deal of the day</p>
+          </div>
           {heading?.value && (
-            <Heading format as="h2" size="display" className="max-w-md py-4">
-              Home Dear
-            </Heading>
+            <p className="py-4 text-[70px] text-white  italianno-font">
+              Paintings
+            </p>
           )}
           {byline?.value && (
             <Text format width="narrow" className="py-2" as="p" size="lead">
@@ -51,8 +54,8 @@ export function Hero({
           <button className="my-4 bg-[#fff] hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
             20% off on every product
           </button>
-
         </div>
+
         <div className="w-10/12 h-[70vh]">
           <Image
             width={'100vw'}
