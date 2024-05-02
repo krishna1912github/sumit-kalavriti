@@ -53,42 +53,44 @@ export function ProductCard({
         prefetch="viewport"
       >
         <div className={clsx('grid gap-4', className)}>
-          <div className="card-image aspect-[4/5] bg-primary/5">
+          <div className="card-image aspect-[5/5] bg-primary/2 shadow-sm">
             {image && (
               <Image
                 className="object-cover w-full fadeIn"
-                sizes="(min-width: 64em) 25vw, (min-width: 48em) 30vw, 45vw"
-                aspectRatio="4/5"
+                sizes="(min-width: 54em) 25vw, (min-width: 48em) 20vw, 30vw"
+                aspectRatio="5/5"
                 data={image}
                 alt={image.altText || `Picture of ${product.title}`}
                 loading={loading}
               />
             )}
-            <Text
+            <p
               as="label"
               size="fine"
               className="absolute top-0 right-0 m-4 text-right text-notice"
             >
-              {cardLabel}
-            </Text>
+              sale
+            </p>
           </div>
-          <div className="grid gap-1">
-            <Text
-              className="w-full overflow-hidden whitespace-nowrap text-ellipsis "
-              as="h3"
-            >
-              {product.title}
-            </Text>
-            <div className="flex gap-4">
-              <Text className="flex gap-4">
-                <Money withoutTrailingZeros data={price!} />
+          <div className="gap-1 text-left">
+            <p className=" overflow-hidden text-ellipsis">
+              Winter sweater green
+            </p>
+            <div className="gap-4">
+              <p>
                 {isDiscounted(price as MoneyV2, compareAtPrice as MoneyV2) && (
                   <CompareAtPrice
                     className={'opacity-50'}
                     data={compareAtPrice as MoneyV2}
                   />
                 )}
-              </Text>
+              </p>
+              <div className="flex gap-4 mt-2">
+              <p className="text-green-700 font-bold">
+                <Money withoutTrailingZeros data={price!} />
+              </p>
+              <button className="bg-[#0054B7] rounded px-2 text-sm text-white font-semibold">add to cart</button>
+              </div>
             </div>
           </div>
         </div>

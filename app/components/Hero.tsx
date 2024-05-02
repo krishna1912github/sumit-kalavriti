@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import {MediaFile} from '@shopify/hydrogen';
+import {MediaFile, Image} from '@shopify/hydrogen';
 import type {
   MediaImage,
   Media,
@@ -30,53 +30,37 @@ export function Hero({
   spreadSecondary,
   top,
 }: HeroProps) {
+  console.log({spreadSecondary});
   return (
     <Link to={`/collections/${handle}`} prefetch="viewport">
-      <section
-        className={clsx(
-          'relative justify-end flex flex-col w-full',
-          top && '-mt-nav',
-          height === 'full'
-            ? 'h-screen'
-            : 'aspect-[4/5] sm:aspect-square md:aspect-[5/4] lg:aspect-[3/2] xl:aspect-[2/1]',
-        )}
-      >
-        <div className="absolute inset-0 grid flex-grow grid-flow-col pointer-events-none auto-cols-fr -z-10 content-stretch overflow-clip">
-          {spread?.reference && (
-            <div>
-              <SpreadMedia
-                sizes={
-                  spreadSecondary?.reference
-                    ? '(min-width: 48em) 50vw, 100vw'
-                    : '100vw'
-                }
-                data={spread.reference as Media}
-                loading={loading}
-              />
-            </div>
-          )}
-          {spreadSecondary?.reference && (
-            <div className="hidden md:block">
-              <SpreadMedia
-                sizes="50vw"
-                data={spreadSecondary.reference as Media}
-                loading={loading}
-              />
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col items-baseline justify-between gap-4 px-6 py-8 sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast">
+      <section className="flex h-[70vh] align-item-center">
+        <div className="w-4/12 p-4 text-center sm:px-8 md:px-12 bg-gradient-to-t dark:from-contrast/60 dark:text-primary from-primary/60 text-contrast bg-[#006466]">
           {heading?.value && (
-            <Heading format as="h2" size="display" className="max-w-md">
-              {heading.value}
+            <Heading format as="h2" size="display" className="max-w-md py-4">
+              Home Dear
             </Heading>
           )}
           {byline?.value && (
-            <Text format width="narrow" as="p" size="lead">
-              {byline.value}
+            <Text format width="narrow" className="py-2" as="p" size="lead">
+              Unique range of handmade specially crafted home decor products
             </Text>
           )}
-          {cta?.value && <Text size="lead">{cta.value}</Text>}
+          <button className="border border-dotted my-4 border-white bg-[#0C8481] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            20% off on every product
+          </button>
+          <button className="my-4 bg-[#fff] hover:bg-blue-700 text-black font-bold py-2 px-4 rounded">
+            20% off on every product
+          </button>
+
+        </div>
+        <div className="w-10/12 h-[70vh]">
+          <Image
+            width={'100vw'}
+            height={'100vh'}
+            src="https://cdn.shopify.com/s/files/1/0551/4566/0472/files/Chalet_Collection_Feature_2.jpg?v=1654902306"
+            className="object-cover object-center h-[70vh]"
+            alt={'banner'}
+          />{' '}
         </div>
       </section>
     </Link>

@@ -8,12 +8,14 @@ import {Await, useLoaderData} from '@remix-run/react';
 import {getSeoMeta} from '@shopify/hydrogen';
 
 import {Hero} from '~/components/Hero';
-import {FeaturedCollections} from '~/components/FeaturedCollections';
+import {CategoryCards} from '~/components/categoryCard';
 import {ProductSwimlane} from '~/components/ProductSwimlane';
 import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 import {getHeroPlaceholder} from '~/lib/placeholders';
 import {seoPayload} from '~/lib/seo.server';
 import {routeHeaders} from '~/data/cache';
+import {ShopByCategory} from '~/components/shopByCategory';
+import {ShopByState} from '~/components/shopByState';
 
 export const headers = routeHeaders;
 
@@ -99,7 +101,18 @@ export default function Homepage() {
       {primaryHero && (
         <Hero {...primaryHero} height="full" top loading="eager" />
       )}
-
+      {featuredCollections && (
+        <Suspense>
+          <Await resolve={featuredCollections}>
+            {({collections}) => {
+              if (!collections?.nodes) return <></>;
+              return (
+                <CategoryCards collections={collections} title="Collections" />
+              );
+            }}
+          </Await>
+        </Suspense>
+      )}
       {featuredProducts && (
         <Suspense>
           <Await resolve={featuredProducts}>
@@ -116,44 +129,8 @@ export default function Homepage() {
           </Await>
         </Suspense>
       )}
-
-      {secondaryHero && (
-        <Suspense fallback={<Hero {...skeletons[1]} />}>
-          <Await resolve={secondaryHero}>
-            {({hero}) => {
-              if (!hero) return <></>;
-              return <Hero {...hero} />;
-            }}
-          </Await>
-        </Suspense>
-      )}
-
-      {featuredCollections && (
-        <Suspense>
-          <Await resolve={featuredCollections}>
-            {({collections}) => {
-              if (!collections?.nodes) return <></>;
-              return (
-                <FeaturedCollections
-                  collections={collections}
-                  title="Collections"
-                />
-              );
-            }}
-          </Await>
-        </Suspense>
-      )}
-
-      {tertiaryHero && (
-        <Suspense fallback={<Hero {...skeletons[2]} />}>
-          <Await resolve={tertiaryHero}>
-            {({hero}) => {
-              if (!hero) return <></>;
-              return <Hero {...hero} />;
-            }}
-          </Await>
-        </Suspense>
-      )}
+      <ShopByCategory />
+      <ShopByState />
     </>
   );
 }
