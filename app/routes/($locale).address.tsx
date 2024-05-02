@@ -5,19 +5,11 @@ import {
 } from '@shopify/remix-oxygen';
 import {Suspense} from 'react';
 import {Await, useLoaderData} from '@remix-run/react';
-import {getSeoMeta} from '@shopify/hydrogen';
 
-import {Hero} from '~/components/Hero';
-import {CategoryCards} from '~/components/categoryCard';
+import {AddressCard} from '~/components/AddressCard';
 import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
-import {getHeroPlaceholder} from '~/lib/placeholders';
 import {seoPayload} from '~/lib/seo.server';
-import {routeHeaders} from '~/data/cache';
-import {ShopByCategory} from '~/components/shopByCategory';
-import {ShopByState} from '~/components/shopByState';
-
-export const headers = routeHeaders;
+import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
 
 export async function loader({params, context}: LoaderFunctionArgs) {
   const {language, country} = context.storefront.i18n;
@@ -80,11 +72,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   });
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
-  return getSeoMeta(...matches.map((match) => (match.data as any).seo));
-};
-
-export default function Homepage() {
+export default function AddressPage() {
   const {
     primaryHero,
     secondaryHero,
@@ -92,26 +80,9 @@ export default function Homepage() {
     featuredCollections,
     featuredProducts,
   } = useLoaderData<typeof loader>();
-
-  // TODO: skeletons vs placeholders
-  const skeletons = getHeroPlaceholder([{}, {}, {}]);
   return (
     <>
-      {primaryHero && (
-        <Hero {...primaryHero} height="full" top loading="eager" />
-      )}
-      {featuredCollections && (
-        <Suspense>
-          <Await resolve={featuredCollections}>
-            {({collections}) => {
-              if (!collections?.nodes) return <></>;
-              return (
-                <CategoryCards collections={collections} title="Collections" />
-              );
-            }}
-          </Await>
-        </Suspense>
-      )}
+      <AddressCard />
       {featuredProducts && (
         <Suspense>
           <Await resolve={featuredProducts}>
@@ -128,8 +99,6 @@ export default function Homepage() {
           </Await>
         </Suspense>
       )}
-      <ShopByCategory />
-      <ShopByState />
     </>
   );
 }
