@@ -122,6 +122,8 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="msvalidate.01" content="A352E6A0AF9A652267361BBB572B8468" />
+        <meta rel="canonical" href="https://example.com/preferred-url-here/" />
+        <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
         <Meta />
         <Links />
       </head>

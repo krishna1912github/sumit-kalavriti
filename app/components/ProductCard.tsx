@@ -65,7 +65,6 @@ export function ProductCard({
               />
             )}
             <p
-              as="label"
               size="fine"
               className="absolute top-0 right-0 m-4 text-right text-notice"
             >
@@ -86,10 +85,12 @@ export function ProductCard({
                 )}
               </p>
               <div className="flex gap-4 mt-2">
-              <p className="text-green-700 font-bold">
-                <Money withoutTrailingZeros data={price!} />
-              </p>
-              <button className="bg-[#0054B7] rounded px-2 text-sm text-white font-semibold">add to cart</button>
+                <p className="text-green-700 font-bold">
+                  <Money withoutTrailingZeros data={price!} />
+                </p>
+                <button className="bg-[#0054B7] rounded px-2 text-sm text-white font-semibold">
+                  add to cart
+                </button>
               </div>
             </div>
           </div>

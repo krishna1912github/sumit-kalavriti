@@ -77,8 +77,9 @@ export function ShopByState() {
               className="p-6 "
             >
               <p className="text-normal text-black font-semibold my-6">
-              Explore the folk arts and crafts of the different regions of the country
-                            </p>
+                Explore the folk arts and crafts of the different regions of the
+                country
+              </p>
               <div className="flex flex-wrap gap-4 justify-center">
                 <div className="rounded-full overflow-hidden w-20 h-20 md:w-32 md:h-32 lg:w-30 lg:h-30">
                   <Image

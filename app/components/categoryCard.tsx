@@ -86,7 +86,9 @@ export function CategoryCards({
           </Link>
         ))}{' '}
       </div>
-      <button className="text-center font-bold text-blue-600 my-4">Explore More</button>
+      <button className="text-center font-bold text-blue-600 my-4">
+        Explore More
+      </button>
     </div>
   );
 }

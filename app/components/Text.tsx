@@ -183,7 +183,7 @@ export function PageHeader({
   return (
     <header {...props} className={styles}>
       {heading && (
-        <Heading as="h1" width="narrow" size="heading" >
+        <Heading as="h1" width="narrow" size="heading">
           {heading}
         </Heading>
       )}

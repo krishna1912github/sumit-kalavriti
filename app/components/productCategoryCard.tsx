@@ -45,7 +45,7 @@ export function ProductCategoryCards({
             </div>
           </Link>
         ))}
-         {collectionsWithImage.map((collection) => (
+        {collectionsWithImage.map((collection) => (
           <Link
             key={collection.id}
             to={`/collections/${collection.handle}`}
