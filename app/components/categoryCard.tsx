@@ -30,11 +30,10 @@ export function CategoryCards({
           >
             <div className="text-center m-4">
               {collection?.image && (
-                <div className="rounded-full overflow-hidden w-40 h-40 mb-2">
+                <div className="rounded-full overflow-hidden w-[120px] h-[120px] mb-2 shadow">
                   <Image
                     alt={`Image of ${collection.title}`}
                     data={collection.image}
-                    sizes="(max-width: 32em) 100vw, 33vw"
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -51,11 +50,10 @@ export function CategoryCards({
           >
             <div className="text-center m-4">
               {collection?.image && (
-                <div className="rounded-full overflow-hidden w-40 h-40 mb-2">
+                <div className="rounded-full overflow-hidden w-[120px] h-[120px] mb-2 shadow">
                   <Image
                     alt={`Image of ${collection.title}`}
                     data={collection.image}
-                    sizes="(max-width: 32em) 100vw, 33vw"
                     className="object-cover w-full h-full"
                   />
                 </div>
@@ -72,7 +70,7 @@ export function CategoryCards({
           >
             <div className="text-center m-4">
               {collection?.image && (
-                <div className="rounded-full overflow-hidden w-40 h-40 mb-2">
+                <div className="rounded-full overflow-hidden w-[120px] h-[120px] mb-2 shadow">
                   <Image
                     alt={`Image of ${collection.title}`}
                     data={collection.image}
