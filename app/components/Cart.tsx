@@ -36,6 +36,7 @@ export function Cart({
   cart: CartReturn | null;
 }) {
   const linesCount = Boolean(cart?.lines?.edges?.length || 0);
+  console.log('cart: ', cart);
 
   return (
     <>
@@ -219,7 +220,7 @@ function CartSummary({
       </h2>
       <dl className="grid">
         <div className="flex items-center justify-between font-medium">
-          <Text as="dt">Subtotal</Text>
+          <Text as="dt">Subotal</Text>
           <Text as="dd" data-test="subtotal">
             {cost?.subtotalAmount?.amount ? (
               <Money data={cost?.subtotalAmount} />

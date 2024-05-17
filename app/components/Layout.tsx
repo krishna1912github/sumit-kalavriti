@@ -34,7 +34,7 @@ type LayoutProps = {
   children: React.ReactNode;
   layout?: LayoutQuery & {
     headerMenu?: EnhancedMenu | null;
-    footerMenu?: EnhancedMenu | null;
+    footerMenu?: EccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccnhancedMenu | null;
   };
 };
 

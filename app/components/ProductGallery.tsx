@@ -16,6 +16,10 @@ export function ProductGallery({
     return null;
   }
 
+  const data = media.map((item, index) =>
+    console.log(`Object ${index + 1}:`, item.previewImage?.url),
+  );
+  console.log('data: ', data);
   return (
     <div
       className={`swimlane md:grid-flow-row hiddenScroll md:p-0 md:overflow-x-auto md:grid-cols-2 ${className}`}
