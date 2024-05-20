@@ -32,6 +32,7 @@ import {ProductSwimlane} from '~/components/ProductSwimlane';
 import {ProductGallery} from '~/components/ProductGallery';
 import {IconCaret, IconCheck, IconClose} from '~/components/Icon';
 import {ImageGallery} from '~/components/ImageGallery';
+import Carousel from '~/components/Carouse';
 import {getExcerpt} from '~/lib/utils';
 import {seoPayload} from '~/lib/seo.server';
 import type {Storefront} from '~/lib/type';
@@ -127,111 +128,39 @@ export default function Product() {
   const {product, shop, recommended, variants, storeDomain} =
     useLoaderData<typeof loader>();
   const {media, title, vendor, descriptionHtml} = product;
+  console.log('product: ', media.nodes);
+  const previewImage =media.nodes.map((item)=>{
+    console.log('item: ', item.previewImage);
+    return item.previewImage
+  })
+  console.log('dd: ', previewImage);
+
   const {shippingPolicy, refundPolicy} = shop;
   console.log('refundPolicy: ', refundPolicy);
   const [activeTab, setActiveTab] = useState('profile');
   const selectedVariant = product?.selectedVariant!;
 
   const isOutOfStock = !selectedVariant?.availableForSale;
-  const images = [
-    {
-      url: 'https://cdn.shopify.com/s/files/1/0629/7593/4662/files/Main_0a4e9096-021a-4c1e-8750-24b233166a12.jpg?v=1714469108',
-    },
-    {
-      url: 'https://cdn.shopify.com/s/files/1/0629/7593/4662/files/Main_c8ff0b5d-c712-429a-be00-b29bd55cbc9d.jpg?v=1714469108',
-    },
-    {
-      url: 'https://cdn.shopify.com/s/files/1/0629/7593/4662/files/Main_f44a9605-cd62-464d-b095-d45cdaa0d0d7.jpg?v=1714469108',
-    },
-  ];
+
   const openTab = (tabName: any) => {
     setActiveTab(tabName);
   };
+  let slides = [
+    "https://i.pinimg.com/originals/51/82/ac/5182ac536727d576c78a9320ac62de30.jpg",
+    "https://wallpapercave.com/wp/wp3386769.jpg",
+    "https://wallpaperaccess.com/full/809523.jpg",
+    "https://getwallpapers.com/wallpaper/full/5/c/0/606489.jpg",
+  ];
   return (
     <>
-      <Section className="px-0 md:px-8 lg:px-12">
-        <div className="grid items-start md:gap-6 lg:gap-20 md:grid-cols-2 lg:grid-cols-3">
-          <ProductGallery
-            media={media.nodes}
-            className="w-full lg:col-span-2"
-          />
+   <div className="w-[60%] m-auto pt-11">
+      <Carousel slides={slides} />
+    </div>
 
-          <div className="sticky md:-mb-nav md:top-nav md:-translate-y-nav md:h-screen md:pt-nav hiddenScroll md:overflow-y-scroll">
-            <section className="flex flex-col w-full max-w-xl gap-8 p-6 md:mx-auto md:max-w-sm md:px-0">
-              <div className="grid gap-2">
-                <Heading as="h1" className="whitespace-normal">
-                  {title}
-                </Heading>
-                {vendor && (
-                  <Text className={'opacity-50 font-medium'}>{vendor}</Text>
-                )}
-              </div>
-              <Suspense fallback={<ProductForm variants={[]} />}>
-                <Await
-                  errorElement="There was a problem loading related products"
-                  resolve={variants}
-                >
-                  {(resp) => (
-                    <ProductForm
-                      variants={resp.product?.variants.nodes || []}
-                    />
-                  )}
-                </Await>
-              </Suspense>
-              <div className="grid gap-4 py-4">
-                {descriptionHtml && (
-                  <ProductDetail
-                    title="Product Details"
-                    content={descriptionHtml}
-                  />
-                )}
-                {shippingPolicy?.body && (
-                  <ProductDetail
-                    title="Shipping"
-                    content={getExcerpt(shippingPolicy.body)}
-                    learnMore={`/policies/${shippingPolicy.handle}`}
-                  />
-                )}
-                {refundPolicy?.body && (
-                  <ProductDetail
-                    title="Returns"
-                    content={getExcerpt(refundPolicy.body)}
-                    learnMore={`/policies/${refundPolicy.handle}`}
-                  />
-                )}
-              </div>
-            </section>
-          </div>
-        </div>
-      </Section>
-      <Suspense fallback={<Skeleton className="h-32" />}>
-        <Await
-          errorElement="There was a problem loading related products"
-          resolve={recommended}
-        >
-          {(products) => (
-            <ProductSwimlane title="Related Products" products={products} />
-          )}
-        </Await>
-      </Suspense>
-      <Analytics.ProductView
-        data={{
-          products: [
-            {
-              id: product.id,
-              title: product.title,
-              price: product.selectedVariant?.price.amount || '0',
-              vendor: product.vendor,
-              variantId: product.selectedVariant?.id || '',
-              variantTitle: product.selectedVariant?.title || '',
-              quantity: 1,
-            },
-          ],
-        }}
-      />
-      <div className="">
+
+      <div className="mt-64">
         <div className="md:flex md:flex-row gap-8 flex flex-col bg-green mx-auto justify-center items-center w-[80%] ">
-          <ImageGallery images={images} />
+          <ImageGallery images={previewImage} />
 
           <div className="w-[60%]">
             <div className="w-[75%]">
@@ -668,247 +597,35 @@ export default function Product() {
           </div>
         </div>
       </div>
+      <Suspense fallback={<Skeleton className="h-32" />}>
+        <Await
+          errorElement="There was a problem loading related products"
+          resolve={recommended}
+        >
+          {(products) => (
+            <ProductSwimlane title="Related Products" products={products} />
+          )}
+        </Await>
+      </Suspense>
+      <Analytics.ProductView
+        data={{
+          products: [
+            {
+              id: product.id,
+              title: product.title,
+              price: product.selectedVariant?.price.amount || '0',
+              vendor: product.vendor,
+              variantId: product.selectedVariant?.id || '',
+              variantTitle: product.selectedVariant?.title || '',
+              quantity: 1,
+            },
+          ],
+        }}
+      />
     </>
   );
 }
 
-export function ProductForm({
-  variants,
-}: {
-  variants: ProductVariantFragmentFragment[];
-}) {
-  const {product, storeDomain} = useLoaderData<typeof loader>();
-
-  const closeRef = useRef<HTMLButtonElement>(null);
-
-  /**
-   * Likewise, we're defaulting to the first variant for purposes
-   * of add to cart if there is none returned from the loader.
-   * A developer can opt out of this, too.
-   */
-  const selectedVariant = product.selectedVariant!;
-
-  const isOutOfStock = !selectedVariant?.availableForSale;
-
-  const isOnSale =
-    selectedVariant?.price?.amount &&
-    selectedVariant?.compareAtPrice?.amount &&
-    selectedVariant?.price?.amount < selectedVariant?.compareAtPrice?.amount;
-
-  const navigate = useNavigate();
-
-  return (
-    <div className="grid gap-10">
-      <div className="grid gap-4">
-        <VariantSelector
-          handle={product.handle}
-          options={product.options}
-          variants={variants}
-        >
-          {({option}) => {
-            return (
-              <div
-                key={option.name}
-                className="flex flex-col flex-wrap mb-4 gap-y-2 last:mb-0"
-              >
-                <Heading as="legend" size="lead" className="min-w-[4rem]">
-                  {option.name}
-                </Heading>
-                <div className="flex flex-wrap items-baseline gap-4">
-                  {option.values.length > 7 ? (
-                    <div className="relative w-full">
-                      <Listbox
-                        onChange={(selectedOption) => {
-                          const value = option.values.find(
-                            (v) => v.value === selectedOption,
-                          );
-
-                          if (value) {
-                            navigate(value.to);
-                          }
-                        }}
-                      >
-                        {({open}) => (
-                          <>
-                            <Listbox.Button
-                              ref={closeRef}
-                              className={clsx(
-                                'flex items-center justify-between w-full py-3 px-4 border border-primary',
-                                open
-                                  ? 'rounded-b md:rounded-t md:rounded-b-none'
-                                  : 'rounded',
-                              )}
-                            >
-                              <span>{option.value}</span>
-                              <IconCaret direction={open ? 'up' : 'down'} />
-                            </Listbox.Button>
-                            <Listbox.Options
-                              className={clsx(
-                                'border-primary bg-contrast absolute bottom-12 z-30 grid h-48 w-full overflow-y-scroll rounded-t border px-2 py-2 transition-[max-height] duration-150 sm:bottom-auto md:rounded-b md:rounded-t-none md:border-t-0 md:border-b',
-                                open ? 'max-h-48' : 'max-h-0',
-                              )}
-                            >
-                              {option.values
-                                .filter((value) => value.isAvailable)
-                                .map(({value, to, isActive}) => (
-                                  <Listbox.Option
-                                    key={`option-${option.name}-${value}`}
-                                    value={value}
-                                  >
-                                    {({active}) => (
-                                      <Link
-                                        to={to}
-                                        preventScrollReset
-                                        className={clsx(
-                                          'text-primary w-full p-2 transition rounded flex justify-start items-center text-left cursor-pointer',
-                                          active && 'bg-primary/10',
-                                        )}
-                                        onClick={() => {
-                                          if (!closeRef?.current) return;
-                                          closeRef.current.click();
-                                        }}
-                                      >
-                                        {value}
-                                        {isActive && (
-                                          <span className="ml-2">
-                                            <IconCheck />
-                                          </span>
-                                        )}
-                                      </Link>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
-                            </Listbox.Options>
-                          </>
-                        )}
-                      </Listbox>
-                    </div>
-                  ) : (
-                    option.values.map(({value, isAvailable, isActive, to}) => (
-                      <Link
-                        key={option.name + value}
-                        to={to}
-                        preventScrollReset
-                        prefetch="intent"
-                        replace
-                        className={clsx(
-                          'leading-none py-1 border-b-[1.5px] cursor-pointer transition-all duration-200',
-                          isActive ? 'border-primary/50' : 'border-primary/0',
-                          isAvailable ? 'opacity-100' : 'opacity-50',
-                        )}
-                      >
-                        {value}
-                      </Link>
-                    ))
-                  )}
-                </div>
-              </div>
-            );
-          }}
-        </VariantSelector>
-        {selectedVariant && (
-          <div className="grid items-stretch gap-4">
-            {isOutOfStock ? (
-              <Button variant="secondary" disabled>
-                <Text>Sold out</Text>
-              </Button>
-            ) : (
-              <AddToCartButton
-                lines={[
-                  {
-                    merchandiseId: selectedVariant.id!,
-                    quantity: 1,
-                  },
-                ]}
-                variant="primary"
-                data-test="add-to-cart"
-              >
-                <Text
-                  as="span"
-                  className="flex items-center justify-center gap-2"
-                >
-                  <span>Add Cart</span> <span>·</span>{' '}
-                  <Money
-                    withoutTrailingZeros
-                    data={selectedVariant?.price!}
-                    as="span"
-                    data-test="price"
-                  />
-                  {isOnSale && (
-                    <Money
-                      withoutTrailingZeros
-                      data={selectedVariant?.compareAtPrice!}
-                      as="span"
-                      className="opacity-50 strike"
-                    />
-                  )}
-                </Text>
-              </AddToCartButton>
-            )}
-            {!isOutOfStock && (
-              <div>
-                <ShopPayButton
-                  width="30%"
-                  variantIds={[selectedVariant?.id!]}
-                  storeDomain={storeDomain}
-                />
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function ProductDetail({
-  title,
-  content,
-  learnMore,
-}: {
-  title: string;
-  content: string;
-  learnMore?: string;
-}) {
-  return (
-    <Disclosure key={title} as="div" className="grid w-full gap-2">
-      {({open}) => (
-        <>
-          <Disclosure.Button className="text-left">
-            <div className="flex justify-between">
-              <Text size="lead" as="h4">
-                {title}
-              </Text>
-              <IconClose
-                className={clsx(
-                  'transition-transform transform-gpu duration-200',
-                  !open && 'rotate-[45deg]',
-                )}
-              />
-            </div>
-          </Disclosure.Button>
-
-          <Disclosure.Panel className={'pb-4 pt-2 grid gap-2'}>
-            <div
-              className="prose dark:prose-invert"
-              dangerouslySetInnerHTML={{__html: content}}
-            />
-            {learnMore && (
-              <div className="">
-                <Link
-                  className="pb-px border-b border-primary/30 text-primary/50"
-                  to={learnMore}
-                >
-                  Learn more
-                </Link>
-              </div>
-            )}
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
-  );
-}
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariantFragment on ProductVariant {
