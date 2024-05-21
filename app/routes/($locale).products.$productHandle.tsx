@@ -1,12 +1,12 @@
-import {useRef, Suspense, useState} from 'react';
-import {Disclosure, Listbox} from '@headlessui/react';
+import { useRef, Suspense, useState } from 'react';
+import { Disclosure, Listbox } from '@headlessui/react';
 import {
   defer,
   type MetaArgs,
   redirect,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
-import {useLoaderData, Await, useNavigate} from '@remix-run/react';
+import { useLoaderData, Await, useNavigate } from '@remix-run/react';
 import {
   getSeoMeta,
   Money,
@@ -23,31 +23,31 @@ import type {
   ProductVariantFragmentFragment,
 } from 'storefrontapi.generated';
 
-import {Heading, Section, Text} from '~/components/Text';
-import {Link} from '~/components/Link';
-import {Button} from '~/components/Button';
-import {AddToCartButton} from '~/components/AddToCartButton';
-import {Skeleton} from '~/components/Skeleton';
-import {ProductSwimlane} from '~/components/ProductSwimlane';
-import {ProductGallery} from '~/components/ProductGallery';
-import {IconCaret, IconCheck, IconClose} from '~/components/Icon';
-import {ImageGallery} from '~/components/ImageGallery';
+import { Heading, Section, Text } from '~/components/Text';
+import { Link } from '~/components/Link';
+import { Button } from '~/components/Button';
+import { AddToCartButton } from '~/components/AddToCartButton';
+import { Skeleton } from '~/components/Skeleton';
+import { ProductSwimlane } from '~/components/ProductSwimlane';
+import { ProductGallery } from '~/components/ProductGallery';
+import { IconCaret, IconCheck, IconClose } from '~/components/Icon';
+import { ImageGallery } from '~/components/ImageGallery';
 import Carousel from '~/components/Carouse';
-import {getExcerpt} from '~/lib/utils';
-import {seoPayload} from '~/lib/seo.server';
-import type {Storefront} from '~/lib/type';
-import {routeHeaders} from '~/data/cache';
-import {MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT} from '~/data/fragments';
+import { getExcerpt } from '~/lib/utils';
+import { seoPayload } from '~/lib/seo.server';
+import type { Storefront } from '~/lib/type';
+import { routeHeaders } from '~/data/cache';
+import { MEDIA_FRAGMENT, PRODUCT_CARD_FRAGMENT } from '~/data/fragments';
 import productdetails from '~/components/productdeatils';
 export const headers = routeHeaders;
 
-export async function loader({params, request, context}: LoaderFunctionArgs) {
-  const {productHandle} = params;
+export async function loader({ params, request, context }: LoaderFunctionArgs) {
+  const { productHandle } = params;
   invariant(productHandle, 'Missing productHandle param, check route filename');
 
   const selectedOptions = getSelectedProductOptions(request);
 
-  const {shop, product} = await context.storefront.query(PRODUCT_QUERY, {
+  const { shop, product } = await context.storefront.query(PRODUCT_QUERY, {
     variables: {
       handle: productHandle,
       selectedOptions,
@@ -57,11 +57,11 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   });
 
   if (!product?.id) {
-    throw new Response('product', {status: 404});
+    throw new Response('product', { status: 404 });
   }
 
   if (!product.selectedVariant) {
-    throw redirectToFirstVariant({product, request});
+    throw redirectToFirstVariant({ product, request });
   }
 
   // In order to show which variants are available in the UI, we need to query
@@ -100,7 +100,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   });
 }
 
-export const meta = ({matches}: MetaArgs<typeof loader>) => {
+export const meta = ({ matches }: MetaArgs<typeof loader>) => {
   return getSeoMeta(...matches.map((match) => (match.data as any).seo));
 };
 
@@ -125,23 +125,39 @@ function redirectToFirstVariant({
 }
 
 export default function Product() {
-  const {product, shop, recommended, variants, storeDomain} =
+  const { product, shop, recommended, variants, storeDomain } =
     useLoaderData<typeof loader>();
-  const {media, title, vendor, descriptionHtml} = product;
-  console.log('product: ', media.nodes);
-  const previewImage =media.nodes.map((item)=>{
-    console.log('item: ', item.previewImage);
+  const { media, title, vendor, descriptionHtml } = product;
+  const previewImage = media.nodes.map((item) => {
     return item.previewImage
   })
-  console.log('dd: ', previewImage);
-
-  const {shippingPolicy, refundPolicy} = shop;
-  console.log('refundPolicy: ', refundPolicy);
-  const [activeTab, setActiveTab] = useState('profile');
+  const { shippingPolicy, refundPolicy } = shop;
+  console.log('refundPolicy: ', product.selectedVariant);
+  const [activeTab, setActiveTab] = useState('description');
   const selectedVariant = product?.selectedVariant!;
 
   const isOutOfStock = !selectedVariant?.availableForSale;
+  function parseHtmlString(htmlString: any) {
+    const cleanedHtml = htmlString.replace(/\n/g, '').replace(/\s+/g, ' ');
 
+    const shortDescriptionMatch = cleanedHtml.match(/<p><strong>Short Description<br><\/strong><\/p>\s*<p>(.*?)<strong>/);
+    const descriptionMatch = cleanedHtml.match(/<strong><br><br>Description<\/strong><\/p>\s*<p>(.*?)<br><br><meta/);
+    const caseMatch = cleanedHtml.match(/<strong>Case<\/strong><br><br>(.*?)<\/p>/);
+  
+    const shortDescription = shortDescriptionMatch ? shortDescriptionMatch[1].trim() : '';
+    const description = descriptionMatch ? descriptionMatch[1].trim() : '';
+    const caseInfo = caseMatch ? caseMatch[1].trim() : '';
+
+    return {
+      shortDescription,
+      description,
+      case: caseInfo
+    };
+  }
+
+  const description: any = parseHtmlString(descriptionHtml);
+
+  console.log(descriptionHtml);
   const openTab = (tabName: any) => {
     setActiveTab(tabName);
   };
@@ -153,12 +169,12 @@ export default function Product() {
   ];
   return (
     <>
-   <div className="w-[60%] m-auto pt-11">
-      <Carousel slides={slides} />
-    </div>
+      {/* <div className="w-[60%] m-auto pt-11">
+        <Carousel slides={slides} />
+      </div> */}
 
 
-      <div className="mt-64">
+      <div className="">
         <div className="md:flex md:flex-row gap-8 flex flex-col bg-green mx-auto justify-center items-center w-[80%] ">
           <ImageGallery images={previewImage} />
 
@@ -172,7 +188,7 @@ export default function Product() {
                   <div className="text-gray-600 mt-4">
                     <div
                       className="prose dark:prose-invert"
-                      dangerouslySetInnerHTML={{__html: descriptionHtml}}
+                      dangerouslySetInnerHTML={{ __html: description?.shortDescription }}
                     />
                   </div>
                 )}
@@ -232,7 +248,7 @@ export default function Product() {
               </div>
               <div className="flex flex-row gap-4 justify-items-start mt-4">
                 <span className="text-lg font-medium text-gray-900 line-through dark:text-white">
-                  ₹1500
+                  {product.selectedVariant?.compareAtPrice?.amount}
                 </span>
                 <span className="ms-3 text-4xl font-medium text-green-700 dark:text-white">
                   {product.selectedVariant?.price.amount}
@@ -482,29 +498,27 @@ export default function Product() {
             >
               <li className="me-2" role="presentation">
                 <button
-                  className={`inline-block p-4  rounded-t-lg ${
-                    activeTab === 'profile'
+                  className={`inline-block p-4  rounded-t-lg ${activeTab === 'description'
                       ? 'bg-white-100 border-blue-500  text-blue-900 '
                       : ' text-gray-400'
-                  }`}
-                  id="profile-tab"
-                  data-tabs-target="#profile"
+                    }`}
+                  id="description-tab"
+                  data-tabs-target="#description"
                   type="button"
                   role="tab"
-                  aria-controls="profile"
-                  aria-selected={activeTab === 'profile'}
-                  onClick={() => openTab('profile')}
+                  aria-controls="description"
+                  aria-selected={activeTab === 'description'}
+                  onClick={() => openTab('description')}
                 >
                   Description
                 </button>
               </li>
               <li className="me-2" role="presentation">
                 <button
-                  className={`inline-block p-4 rounded-t-lg ${
-                    activeTab === 'dashboard'
+                  className={`inline-block p-4 rounded-t-lg ${activeTab === 'dashboard'
                       ? 'bg-white-100 border-blue-500  text-blue-900'
                       : ' text-gray-400'
-                  }`}
+                    }`}
                   id="dashboard-tab"
                   data-tabs-target="#dashboard"
                   type="button"
@@ -518,11 +532,10 @@ export default function Product() {
               </li>
               <li className="me-2" role="presentation">
                 <button
-                  className={`inline-block p-4  rounded-t-lg ${
-                    activeTab === 'review'
+                  className={`inline-block p-4  rounded-t-lg ${activeTab === 'review'
                       ? 'bg-white-100 border-blue-500  text-blue-900 '
                       : ' text-gray-400'
-                  }`}
+                    }`}
                   id="review-tab"
                   data-tabs-target="#review"
                   type="button"
@@ -538,47 +551,32 @@ export default function Product() {
           </div>
           <div id="default-tab-content">
             <div
-              className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                activeTab !== 'profile' ? 'hidden' : ''
-              }`}
-              id="profile"
+              className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab !== 'description' ? 'hidden' : ''
+                }`}
+              id="description"
               role="tabpanel"
-              aria-labelledby="profile-tab"
+              aria-labelledby="description-tab"
             >
-              <p className=" w-[80%] text-base text-gray-500 dark:text-gray-400 ml-10  flex flex-wrap justify-start">
-                . PROFILEE PROFILEE PROFILEE will toggle the visibility of this
-                one for the next. The tab JavaScript swaps classes to control
-                the content visibility and styling. . PROFILEE another tab will
-                toggle the visibility of this one for the next. The tab
-                JavaScript swaps classes to control the content visibility and
-                styling. . Clicking another tab will toggle the visibility of
-                this one for the next. The tab JavaScript swaps classes to
-                control the content visibility and styling.
-              </p>
+              <div
+                className="prose dark:prose-invert w-[80%] text-base text-gray-500 dark:text-gray-400 ml-10  flex flex-wrap justify-start"
+                dangerouslySetInnerHTML={{ __html: description?.case }}
+              />
             </div>
             <div
-              className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                activeTab !== 'dashboard' ? 'hidden' : ''
-              }`}
+              className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab !== 'dashboard' ? 'hidden' : ''
+                }`}
               id="dashboard"
               role="tabpanel"
               aria-labelledby="dashboard-tab"
             >
-              <p className=" w-[80%] text-base text-gray-500 dark:text-gray-400 ml-10  flex flex-wrap justify-start">
-                . dashboard dashboard dashboard dashboard toggle the visibility
-                of this one for the next. The tab JavaScript swaps classes to
-                control the content visibility and styling. . Clicking another
-                tab will toggle the visibility of this one for the next. The tab
-                JavaScript swaps classes to control the content visibility and
-                styling. . Clicking another tab will toggle the visibility of
-                this one for the next. The tab JavaScript swaps classes to
-                control the content visibility and styling.
-              </p>
+              <div
+                className="prose dark:prose-invert w-[80%] text-base text-gray-500 dark:text-gray-400 ml-10  flex flex-wrap justify-start"
+                dangerouslySetInnerHTML={{ __html: description?.description }}
+              />
             </div>
             <div
-              className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${
-                activeTab !== 'review' ? 'hidden' : ''
-              }`}
+              className={`p-4 rounded-lg bg-gray-50 dark:bg-gray-800 ${activeTab !== 'review' ? 'hidden' : ''
+                }`}
               id="review"
               role="tabpanel"
               aria-labelledby="review-tab"
@@ -759,7 +757,7 @@ async function getRecommendedProducts(
   productId: string,
 ) {
   const products = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
-    variables: {productId, count: 12},
+    variables: { productId, count: 12 },
   });
 
   invariant(products, 'No data returned from Shopify API');
@@ -777,5 +775,5 @@ async function getRecommendedProducts(
 
   mergedProducts.splice(originalProduct, 1);
 
-  return {nodes: mergedProducts};
+  return { nodes: mergedProducts };
 }
