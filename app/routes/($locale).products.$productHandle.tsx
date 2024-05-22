@@ -32,7 +32,7 @@ import { ProductSwimlane } from '~/components/ProductSwimlane';
 import { ProductGallery } from '~/components/ProductGallery';
 import { IconCaret, IconCheck, IconClose } from '~/components/Icon';
 import { ImageGallery } from '~/components/ImageGallery';
-import Carousel from '~/components/Carouse';
+import Carousel from '~/components/Carousel';
 import { getExcerpt } from '~/lib/utils';
 import { seoPayload } from '~/lib/seo.server';
 import type { Storefront } from '~/lib/type';
@@ -161,12 +161,12 @@ export default function Product() {
   const openTab = (tabName: any) => {
     setActiveTab(tabName);
   };
-  let slides = [
-    "https://i.pinimg.com/originals/51/82/ac/5182ac536727d576c78a9320ac62de30.jpg",
-    "https://wallpapercave.com/wp/wp3386769.jpg",
-    "https://wallpaperaccess.com/full/809523.jpg",
-    "https://getwallpapers.com/wallpaper/full/5/c/0/606489.jpg",
-  ];
+  // let slides = [
+  //   "https://i.pinimg.com/originals/51/82/ac/5182ac536727d576c78a9320ac62de30.jpg",
+  //   "https://wallpapercave.com/wp/wp3386769.jpg",
+  //   "https://wallpaperaccess.com/full/809523.jpg",
+  //   "https://getwallpapers.com/wallpaper/full/5/c/0/606489.jpg",
+  // ];
   return (
     <>
       {/* <div className="w-[60%] m-auto pt-11">
